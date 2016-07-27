@@ -1,0 +1,16 @@
+
+plugins {
+	id 'java-gradle-plugin'
+	id 'groovy'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	compile 'org.pegdown:pegdown:1.5.+'
+	
+    testCompile 'junit:junit:4.12'
+}
+

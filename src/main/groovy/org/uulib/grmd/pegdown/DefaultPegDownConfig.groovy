@@ -1,7 +1,8 @@
-package org.uulib.grmd
+package org.uulib.grmd.pegdown
 
-import org.uulib.grmd.pdoptions.HasPegDownOptions
-import org.uulib.grmd.pdoptions.PegDownOptions;;
+import org.uulib.grmd.pegdown.PegDownConfig;
+import org.uulib.grmd.pegdown.asttransform.HasPegDownOptions
+import org.uulib.grmd.pegdown.asttransform.PegDownOptions;;
 
 /**
  * Default implementation of {@linkplain PegDownConfig}.

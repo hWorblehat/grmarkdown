@@ -1,6 +1,6 @@
-package org.uulib.grmd
+package org.uulib.grmd.pegdown
 
-import org.pegdown.Extensions;
+import org.pegdown.Extensions
 
 import spock.lang.*
 

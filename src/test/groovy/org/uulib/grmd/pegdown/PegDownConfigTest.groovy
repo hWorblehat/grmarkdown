@@ -1,7 +1,8 @@
-package org.uulib.grmd;
+package org.uulib.grmd.pegdown;
 
 import java.lang.reflect.Method
-import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilationFailedException
+import org.uulib.grmd.pegdown.PegDownConfig;
 
 import spock.lang.*
 

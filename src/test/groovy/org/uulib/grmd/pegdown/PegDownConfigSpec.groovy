@@ -10,7 +10,7 @@ import spock.lang.*
  * A basic set of reflection tests to check that the {@code HasPegDownOptions} AST transformation has added methods to
  * the {@linkplain PegDownConfig} interface.
  */
-class PegDownConfigTest extends Specification {
+class PegDownConfigSpec extends Specification {
 	
 	GroovyClassLoader groovyClassLoader = new GroovyClassLoader()
 	

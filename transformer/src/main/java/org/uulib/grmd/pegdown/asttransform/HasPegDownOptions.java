@@ -3,6 +3,7 @@ package org.uulib.grmd.pegdown.asttransform;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -22,6 +23,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass;
  * 
  * @author Rowan Lonsdale
  */
+@Documented
 @Retention(SOURCE)
 @Target(TYPE)
 @GroovyASTTransformationClass(classes=Transformer.class)

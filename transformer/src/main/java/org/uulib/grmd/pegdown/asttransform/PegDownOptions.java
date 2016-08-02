@@ -3,6 +3,7 @@ package org.uulib.grmd.pegdown.asttransform;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -12,6 +13,7 @@ import java.lang.annotation.Target;
  * @see HasPegDownOptions
  * @author Rowan Lonsdale
  */
+@Documented
 @Retention(SOURCE)
 @Target(FIELD)
 public @interface PegDownOptions {

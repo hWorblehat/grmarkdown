@@ -27,8 +27,19 @@ import org.gradle.api.tasks.util.PatternFilterable;
 import org.gradle.api.tasks.util.PatternSet;
 import org.gradle.language.base.sources.BaseLanguageSourceSet;
 
+/**
+ * A task whose inputs are taken from source directories, and where each output file generally depend on a single
+ * input file.
+ * <p/>
+ * This task's {@linkplain #getActions() actions} are defined in this class, and extending classes provide a function
+ * to process each source file via the {@link #getOutOfDateProcessor()} method.
+ * @author Rowan Lonsdale
+ */
 public abstract class IncrementalSourceTask extends DefaultTask {
 
+	/**
+	 * The {@linkplain SourceDirectorySet} that this task compiles.
+	 */
 	@Delegate(excludeTypes=[FileTree, Named, PatternFilterable], interfaces=false)
 	@InputFiles
 	final SourceDirectorySet sources;
@@ -36,18 +47,25 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	@Delegate
 	private final PatternFilterable pf;
 	
-	public IncrementalSourceTask() {
-		sources = getSDF().create("$name markdown source")
+	/**
+	 * Constructor for IncrementalSourceTask.
+	 * @param sourceTypeName An name for the type of source that this task compiles.
+	 */
+	protected IncrementalSourceTask(String sourceTypeName) {
+		sources = getSDF().create("$name ${sourceTypeName} source")
 		pf = sources
 	}
 	
+	/**
+	 * Used to create the task's source container during construction.
+	 */
 	@Inject
 	protected SourceDirectorySetFactory getSDF() {
 		throw new UnsupportedOperationException();
 	}
 	
 	@TaskAction
-	public void processChangedSources(IncrementalTaskInputs inputs) {
+	void processChangedSources(IncrementalTaskInputs inputs) {
 		List<Boolean> incremental = [inputs.isIncremental()]
 		Set<File> outOfDate = new HashSet<>()
 		
@@ -62,7 +80,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 					for(File dir: sources.srcDirs) {
 						Path dPath = dir.toPath()
 						if(path.startsWith(dPath)) {
-							deleteOutputs(dPath.relativize(path))
+							deleteOutputs(dir, dPath.relativize(path))
 							return
 						}
 					}
@@ -83,12 +101,27 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 			
 		}
 		
-		sources.visit(getOutOfDateProcessor())
+		sources.visit(outOfDateProcessor)
 		
 	}
 	
+	/**
+	 * Produces a {@linkplain FileVisitor} that will visit each of the out-of-date source files and directories in this
+	 * task's sources. This method will only be called once per execution of the task.
+	 * @return The FileVisitor that compiles out of date sources into new outputs.
+	 */
 	protected abstract FileVisitor getOutOfDateProcessor()
-	protected abstract void deleteOutputs(Path input)
+	
+	/**
+	 * Deletes the output files corresponding to the specified source file, which was removed since the last run.
+	 * @param srcDir The root source directory that contained the source file.
+	 * @param input The {@linkplain Path} of the deleted source file relative to the root source directory.
+	 */
+	protected abstract void deleteOutputs(File srcDir, Path input)
+	
+	/**
+	 * Deletes all output files.
+	 */
 	protected abstract void deleteAllOutputs()
 
 }

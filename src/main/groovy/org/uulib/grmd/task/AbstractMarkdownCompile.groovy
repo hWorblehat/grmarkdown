@@ -13,15 +13,30 @@ import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.uulib.grmd.MarkdownProcessor
+import org.uulib.grmd.plugin.BasePlugin;
 
+/**
+ * Compiles markdown sources to html. The choice of the {@linkplain MarkdownProcessor} to use is left to the
+ * extending class.
+ * @author Rowan Lonsdale
+ */
 abstract class AbstractMarkdownCompile extends IncrementalSourceTask {
 	
 	private static final String FILE_EXTENSION_RX = /\.[^\.\s]+$/
 	
+	/**
+	 * The destination directory for compile HTML.
+	 */
 	@OutputDirectory File destinationDir
+	
+	/**
+	 * The extension to give generated HTML files.
+	 */
 	@Input String htmlFileExtension = 'html'
 	
 	protected AbstractMarkdownCompile() {
+		super('markdown')
+		group = BasePlugin.MARKDOWN_TASK_GROUP
 		include("**/*.md", "**/*.markdown")
 	}
 
@@ -31,7 +46,7 @@ abstract class AbstractMarkdownCompile extends IncrementalSourceTask {
 	}
 
 	@Override
-	protected void deleteOutputs(Path input) {
+	protected void deleteOutputs(File srcDir, Path input) {
 		destinationDir.toPath().resolve(input.resolveSibling(toOutputName(input.fileName.toString()))).toFile().delete()
 	}
 
@@ -44,6 +59,9 @@ abstract class AbstractMarkdownCompile extends IncrementalSourceTask {
 		return input.replaceFirst(FILE_EXTENSION_RX, ".$htmlFileExtension")
 	}
 
+	/**
+	 * @return The {@linkplain MarkdownProcessor} to use to compile markdown to HTML.
+	 */
 	protected abstract MarkdownProcessor getMarkdownProcessor()
 	
 	private class OutOfDateProcessor implements FileVisitor {

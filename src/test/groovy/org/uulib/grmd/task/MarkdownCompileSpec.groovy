@@ -4,6 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths;
 
 import org.gradle.api.Project
+import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
@@ -11,6 +12,8 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import org.uulib.grmd.plugin.BasePlugin;
+
 import spock.lang.*
 
 /**
@@ -38,6 +41,21 @@ This is a test document to check the markdown compiler is working:
 	def setup() {
 		markdownFolder = projectFolder.newFolder(DEFAULT_MARKDOWN_FOLDER)
 		htmlFolder = projectFolder.newFolder(DEFAULT_HTML_FOLDER)
+	}
+	
+	def "A MarkdownCompile task has the expected properties"() {
+		setup:
+		Project project = ProjectBuilder.builder().build()
+		String taskName = 'compileSomeMarkdown'
+		
+		when:
+		MarkdownCompile task = project.task([type: MarkdownCompile], taskName)
+		
+		then:
+		task != null
+		task.name==taskName
+		task.group==BasePlugin.MARKDOWN_TASK_GROUP
+		task.sources.name=="${taskName} markdown source"
 	}
 	
 	def "The MarkdownCompile task produces HTML files"() {

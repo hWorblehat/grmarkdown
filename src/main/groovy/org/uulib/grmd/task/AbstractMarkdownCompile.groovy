@@ -1,53 +1,75 @@
-package org.uulib.grmd.task
+package org.uulib.grmd.task;
 
 import java.io.File
+import java.nio.file.Path;
+import java.util.Collections
+import java.util.List
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
-import org.apache.commons.io.output.CountingOutputStream;
 import org.gradle.api.file.FileVisitDetails
+import org.gradle.api.file.FileVisitor
+import org.gradle.api.file.RelativePath
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.incremental.IncrementalTaskInputs
-import org.gradle.api.tasks.incremental.InputFileDetails
-
 import org.uulib.grmd.MarkdownProcessor
 
-abstract class AbstractMarkdownCompile extends SourceTask {
+abstract class AbstractMarkdownCompile extends IncrementalSourceTask {
+	
+	private static final String FILE_EXTENSION_RX = /\.[^\.\s]+$/
 	
 	@OutputDirectory File destinationDir
+	@Input String htmlFileExtension = 'html'
 	
-	AbstractMarkdownCompile() {
-		include "**/*.md", "**/*.markdown"
+	protected AbstractMarkdownCompile() {
+		include("**/*.md", "**/*.markdown")
+	}
+
+	@Override
+	protected FileVisitor getOutOfDateProcessor() {
+		return new OutOfDateProcessor()
+	}
+
+	@Override
+	protected void deleteOutputs(Path input) {
+		destinationDir.toPath().resolve(input.resolveSibling(toOutputName(input.fileName.toString()))).toFile().delete()
+	}
+
+	@Override
+	protected void deleteAllOutputs() {
+		getProject().delete(destinationDir.listFiles())
 	}
 	
-	@TaskAction
-	void compile(IncrementalTaskInputs inputs) {
-		if(!inputs.incremental) {
-			project.delete(destinationDir.listFiles())
+	private String toOutputName(String input) {
+		return input.replaceFirst(FILE_EXTENSION_RX, ".$htmlFileExtension")
+	}
+
+	protected abstract MarkdownProcessor getMarkdownProcessor()
+	
+	private class OutOfDateProcessor implements FileVisitor {
+		
+		private final MarkdownProcessor markdownProcessor = AbstractMarkdownCompile.this.markdownProcessor
+
+		@Override
+		public void visitDir(FileVisitDetails details) {
+			details.relativePath.getFile(destinationDir).mkdirs()
 		}
-		
-		MarkdownProcessor processor = markdownProcessor
-		IncrementalSources sources = new IncrementalSources(source, inputs)
-		
-		sources.outOfDate.visit { FileVisitDetails outOfDate ->
-			File destinationFile = new File(destinationDir, outOfDate.path)
-			if(outOfDate.directory) {
-				destinationFile.mkdirs()
-			} else {
-				destinationFile = new File(destinationFile.parentFile, destinationFile.name.replaceFirst(/\.\w+$/, '.html'))
-				destinationFile.withWriter { Writer html ->
-					outOfDate.file.withReader { Reader markdown ->
-						processor.markdownToHTML(markdown, html)
-					}
+
+		@Override
+		public void visitFile(FileVisitDetails details) {
+			RelativePath rp = details.relativePath
+
+			File outputFile = rp.replaceLastName(toOutputName(rp.lastName))
+					.getFile(destinationDir)
+
+			outputFile.withWriter { Writer html ->
+				details.file.withReader { Reader markdown ->
+					markdownProcessor.markdownToHTML(markdown, html)
 				}
 			}
+
 		}
 		
-		sources.removed.visit {
-			new File(destinationDir, it.path).delete()
-		}
 	}
-	
-	protected abstract MarkdownProcessor getMarkdownProcessor()
 
 }

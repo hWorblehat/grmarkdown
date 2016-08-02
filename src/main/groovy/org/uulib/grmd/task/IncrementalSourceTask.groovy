@@ -25,7 +25,9 @@ import org.gradle.api.tasks.incremental.IncrementalTaskInputs;
 import org.gradle.api.tasks.incremental.InputFileDetails;
 import org.gradle.api.tasks.util.PatternFilterable;
 import org.gradle.api.tasks.util.PatternSet;
-import org.gradle.language.base.sources.BaseLanguageSourceSet;
+import org.gradle.language.base.sources.BaseLanguageSourceSet
+import org.uulib.grmd.Renamable;
+import org.uulib.grmd.file.SwappableSourceDirectorySet
 
 /**
  * A task whose inputs are taken from source directories, and where each output file generally depend on a single
@@ -40,20 +42,19 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	/**
 	 * The {@linkplain SourceDirectorySet} that this task compiles.
 	 */
-	@Delegate(excludeTypes=[FileTree, Named, PatternFilterable], interfaces=false)
-	@InputFiles
-	final SourceDirectorySet sources;
+	@Delegate(excludeTypes=[FileTree, Renamable, PatternFilterable], interfaces=false)
+	final SwappableSourceDirectorySet source
 	
 	@Delegate
-	private final PatternFilterable pf;
+	private final PatternFilterable pf
 	
 	/**
 	 * Constructor for IncrementalSourceTask.
 	 * @param sourceTypeName An name for the type of source that this task compiles.
 	 */
-	protected IncrementalSourceTask(String sourceTypeName) {
-		sources = getSDF().create("$name ${sourceTypeName} source")
-		pf = sources
+	protected IncrementalSourceTask() {
+		source = new SwappableSourceDirectorySet(getSDF(), '')
+		pf = source
 	}
 	
 	/**
@@ -62,6 +63,11 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	@Inject
 	protected SourceDirectorySetFactory getSDF() {
 		throw new UnsupportedOperationException();
+	}
+	
+	@InputFiles
+	FileTree getSources() {
+		return source.asFileTree
 	}
 	
 	@TaskAction
@@ -77,7 +83,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 			inputs.removed { InputFileDetails details ->
 				if(incremental[0]) {
 					Path path = details.getFile().toPath()
-					for(File dir: sources.srcDirs) {
+					for(File dir: source.srcDirs) {
 						Path dPath = dir.toPath()
 						if(path.startsWith(dPath)) {
 							deleteOutputs(dir, dPath.relativize(path))
@@ -89,7 +95,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 			}
 		}
 		
-		FileTree sources = this.sources
+		FileTree sources = this.source
 		
 		if(!incremental[0]) {
 			deleteAllOutputs()

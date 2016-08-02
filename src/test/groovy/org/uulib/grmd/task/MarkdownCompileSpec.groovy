@@ -1,20 +1,23 @@
 package org.uulib.grmd.task
 
 import java.nio.file.Path
-import java.nio.file.Paths;
+import java.nio.file.Paths
 
 import org.gradle.api.Project
-import org.gradle.api.Task;
+import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
-import org.gradle.testkit.runner.TaskOutcome;
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import org.uulib.grmd.plugin.BasePlugin;
+import org.uulib.grmd.TestUtils
+import org.uulib.grmd.plugin.MarkdownBasePlugin
 
 import spock.lang.*
+
+import static org.uulib.grmd.TestUtils.*
 
 /**
  * Tests {@linkplain MarkdownCompile}.
@@ -25,15 +28,6 @@ class MarkdownCompileSpec extends Specification {
 	private static final String DEFAULT_MARKDOWN_FOLDER = 'myMarkdown'
 	private static final String DEFAULT_HTML_FOLDER = 'myHTML'
 	private static final String DEFAULT_TASK_NAME = 'testCOmpileMarkdown'
-	
-	private static final String DEFAULT_MARKDOWN_TEXT =
-"""
-# Test Document
-This is a test document to check the markdown compiler is working:
-
- * An HTML file with the same name should be created
- * That HTML file should contain HTML compiled by [Pegdown](http://pegdown.org)
-"""
 	
 	@Rule TemporaryFolder projectFolder = new TemporaryFolder()
 	File markdownFolder, htmlFolder
@@ -54,8 +48,8 @@ This is a test document to check the markdown compiler is working:
 		then:
 		task != null
 		task.name==taskName
-		task.group==BasePlugin.MARKDOWN_TASK_GROUP
-		task.sources.name=="${taskName} markdown source"
+		task.group==MarkdownBasePlugin.MARKDOWN_TASK_GROUP
+		task.source.name==""
 	}
 	
 	def "The MarkdownCompile task produces HTML files"() {
@@ -63,7 +57,7 @@ This is a test document to check the markdown compiler is working:
 		generateBuildscript()
 		String fileName = 'document'
 		File markdownFile = new File(markdownFolder, "${fileName}.md")
-		markdownFile.text = DEFAULT_MARKDOWN_TEXT
+		markdownFile.text = sampleMarkdownText
 		
 		when:
 		BuildResult result = runBuild()
@@ -80,7 +74,7 @@ This is a test document to check the markdown compiler is working:
 		String fileName2 = 'grr/document2'
 		File markdownFile = new File(markdownFolder, "${fileName}.md")
 		File markdownFile2 = new File(markdownFolder, "${fileName2}.markdown")
-		markdownFile.text = DEFAULT_MARKDOWN_TEXT
+		markdownFile.text = sampleMarkdownText
 		
 		File htmlFile = new File(htmlFolder, "${fileName}.html")
 		
@@ -96,7 +90,7 @@ This is a test document to check the markdown compiler is working:
 		//println htmlFile.text
 		long modifiedTime = htmlFile.lastModified()
 		markdownFile2.parentFile.mkdirs()
-		markdownFile2.text = DEFAULT_MARKDOWN_TEXT
+		markdownFile2.text = sampleMarkdownText
 		Thread.sleep(4) // Sleep to ensure file modification timestamps will be different
 		result = runBuild()
 		
@@ -153,7 +147,7 @@ This is a test document to check the markdown compiler is working:
 		buildFile.text =
 """
 plugins {
-	id 'org.uulib.grmd.grmd-base'
+	id 'org.uulib.grmd.markdown-base'
 }
 
 task(${taskName}, type: MarkdownCompile) {
@@ -163,13 +157,8 @@ task(${taskName}, type: MarkdownCompile) {
 """
 	}
 			
-	private BuildResult runBuild(List<String> arguments = ['--stacktrace', DEFAULT_TASK_NAME]) {
-		GradleRunner.create()
-			.withProjectDir(projectFolder.root)
-			.withPluginClasspath()
-			.withDebug(true)
-			.withArguments(arguments)
-			.build()
+	private BuildResult runBuild(List<String> tasks = [DEFAULT_TASK_NAME]) {
+		getGradleRunner(projectFolder.root, *tasks).build()
 	}
 
 }

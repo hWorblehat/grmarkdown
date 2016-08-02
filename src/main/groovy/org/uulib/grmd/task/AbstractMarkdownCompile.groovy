@@ -13,7 +13,7 @@ import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.uulib.grmd.MarkdownProcessor
-import org.uulib.grmd.plugin.BasePlugin;
+import org.uulib.grmd.plugin.MarkdownBasePlugin;
 
 /**
  * Compiles markdown sources to html. The choice of the {@linkplain MarkdownProcessor} to use is left to the
@@ -35,8 +35,7 @@ abstract class AbstractMarkdownCompile extends IncrementalSourceTask {
 	@Input String htmlFileExtension = 'html'
 	
 	protected AbstractMarkdownCompile() {
-		super('markdown')
-		group = BasePlugin.MARKDOWN_TASK_GROUP
+		group = MarkdownBasePlugin.MARKDOWN_TASK_GROUP
 		include("**/*.md", "**/*.markdown")
 	}
 

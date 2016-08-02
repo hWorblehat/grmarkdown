@@ -13,6 +13,7 @@ allprojects {
 	
 dependencies {
 	compile (
+		'com.google.guava:guava:19.+',
 		'commons-io:commons-io:2.+',
 		'org.codehaus.groovy:groovy-all:2.4.4',
 		'org.pegdown:pegdown:1.5.+'
@@ -29,8 +30,12 @@ dependencies {
 gradlePlugin {
 	plugins {
 		base {
-			id = 'org.uulib.grmd.grmd-base'
-			implementationClass = 'org.uulib.grmd.plugin.BasePlugin'
+			id = 'org.uulib.grmd.markdown-base'
+			implementationClass = 'org.uulib.grmd.plugin.MarkdownBasePlugin'
+		}
+		traditional {
+			id = 'org.uulib.grmd.markdown'
+			implementationClass = 'org.uulib.grmd.plugin.MarkdownPlugin'
 		}
 	}
 }

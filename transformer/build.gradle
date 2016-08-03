@@ -1,9 +1,0 @@
-
-plugins {
-	id 'java'
-}
-
-dependencies {
-	compile localGroovy()
-	compile 'org.pegdown:pegdown:1.5.+'
-}

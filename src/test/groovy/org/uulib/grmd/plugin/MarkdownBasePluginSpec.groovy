@@ -31,7 +31,7 @@ plugins {
 }
 
 task('myTask', type: MarkdownCompile) {
-	source.name = '${sourceName}'
+	sourceName = '${sourceName}'
 }
 """
 		

@@ -20,7 +20,7 @@ public class PegDownProcessor implements MarkdownProcessor {
 	
 	private final org.pegdown.PegDownProcessor processor;
 	
-	public PegDownProcessor(PegDownConfig config) {
+	public PegDownProcessor(MinimalPegDownConfig config) {
 		processor = new org.pegdown.PegDownProcessor(config.getOptions());
 	}
 

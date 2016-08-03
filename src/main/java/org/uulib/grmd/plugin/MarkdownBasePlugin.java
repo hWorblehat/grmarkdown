@@ -1,12 +1,17 @@
 package org.uulib.grmd.plugin;
 
+import java.util.List;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.plugins.ExtensionAware;
+import org.gradle.api.plugins.ExtraPropertiesExtension;
 import org.gradle.model.Finalize;
 import org.gradle.model.ModelMap;
 import org.gradle.model.Mutate;
 import org.gradle.model.RuleSource;
+import org.uulib.grmd.Defaults;
 import org.uulib.grmd.task.AbstractMarkdownCompile;
 import org.uulib.grmd.task.MarkdownCompile;
 
@@ -22,17 +27,20 @@ import com.google.common.collect.ImmutableList;
  * 
  * @author Rowan Lonsdale
  */
-public class MarkdownBasePlugin implements Plugin<Project> {
-	
-	public static final String MARKDOWN_TASK_GROUP = "Documentation";
+public class MarkdownBasePlugin implements Plugin<Project>, Defaults {
 	
 	private static final ImmutableList<Class<? extends Task>> TASK_CLASSES =
 			ImmutableList.<Class<? extends Task>>of(MarkdownCompile.class, AbstractMarkdownCompile.class);
 
 	@Override
 	public void apply(Project project) {
-		for(Class<? extends Task> taskClass: TASK_CLASSES) {
-			project.getExtensions().getExtraProperties().set(taskClass.getSimpleName(), taskClass);
+		setClassesAsExtraProperties(project, TASK_CLASSES);
+	}
+	
+	static void setClassesAsExtraProperties(ExtensionAware owner, List<? extends Class<?>> classes) {
+		ExtraPropertiesExtension ext = owner.getExtensions().getExtraProperties();
+		for(Class<?> clazz: classes) {
+			ext.set(clazz.getSimpleName(), clazz);
 		}
 	}
 	
@@ -49,7 +57,7 @@ public class MarkdownBasePlugin implements Plugin<Project> {
 			void setTaskDescription(AbstractMarkdownCompile task) {
 				if(task.getDescription()==null || task.getDescription().isEmpty()) {
 					StringBuilder description = new StringBuilder("Compiles ");
-					String sourceName = task.getSource().getName();
+					String sourceName = task.getSourceName();
 					if(sourceName!=null && !sourceName.isEmpty()) {
 						description.append("the ").append(sourceName).append(' ');
 					}

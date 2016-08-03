@@ -49,7 +49,6 @@ class MarkdownCompileSpec extends Specification {
 		task != null
 		task.name==taskName
 		task.group==MarkdownBasePlugin.MARKDOWN_TASK_GROUP
-		task.source.name==""
 	}
 	
 	def "The MarkdownCompile task produces HTML files"() {

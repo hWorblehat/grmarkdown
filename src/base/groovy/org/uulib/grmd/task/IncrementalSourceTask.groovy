@@ -1,33 +1,26 @@
 package org.uulib.grmd.task;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set
+import java.nio.file.Path
 
-import javax.inject.Inject;
+import javax.inject.Inject
 
-import org.gradle.api.Action;
 import org.gradle.api.DefaultTask
-import org.gradle.api.Named;
-import org.gradle.api.file.FileTree;
-import org.gradle.api.file.FileTreeElement;
-import org.gradle.api.file.FileVisitor;
+import org.gradle.api.Project
+import org.gradle.api.file.DirectoryTree
+import org.gradle.api.file.FileTree
+import org.gradle.api.file.FileTreeElement
+import org.gradle.api.file.FileVisitor
 import org.gradle.api.file.SourceDirectorySet
-import org.gradle.api.internal.file.SourceDirectorySetFactory;
+import org.gradle.api.internal.file.SourceDirectorySetFactory
 import org.gradle.api.specs.Spec
-import org.gradle.api.tasks.InputFiles;
-import org.gradle.api.tasks.OutputDirectories;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.incremental.IncrementalTaskInputs;
-import org.gradle.api.tasks.incremental.InputFileDetails;
-import org.gradle.api.tasks.util.PatternFilterable;
-import org.gradle.api.tasks.util.PatternSet;
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.OutputDirectories
+import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.incremental.IncrementalTaskInputs
+import org.gradle.api.tasks.incremental.InputFileDetails
+import org.gradle.api.tasks.util.PatternFilterable
+import org.gradle.api.tasks.util.PatternSet
 import org.gradle.language.base.sources.BaseLanguageSourceSet
-import org.uulib.grmd.Renamable;
-import org.uulib.grmd.file.SwappableSourceDirectorySet
 
 /**
  * A task whose inputs are taken from source directories, and where each output file generally depend on a single
@@ -39,22 +32,20 @@ import org.uulib.grmd.file.SwappableSourceDirectorySet
  */
 public abstract class IncrementalSourceTask extends DefaultTask {
 
-	/**
-	 * The {@linkplain SourceDirectorySet} that this task compiles.
-	 */
-	@Delegate(excludeTypes=[FileTree, Renamable, PatternFilterable], interfaces=false)
-	final SwappableSourceDirectorySet source
+	private final SourceDirectorySet source
 	
 	@Delegate
 	private final PatternFilterable pf
+	
+	String sourceName
 	
 	/**
 	 * Constructor for IncrementalSourceTask.
 	 * @param sourceTypeName An name for the type of source that this task compiles.
 	 */
 	protected IncrementalSourceTask() {
-		source = new SwappableSourceDirectorySet(getSDF(), '')
-		pf = source
+		source = getSDF().create("${name} sources")
+		pf = source.filter
 	}
 	
 	/**
@@ -65,9 +56,12 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 		throw new UnsupportedOperationException();
 	}
 	
+	/**
+	 * The {@linkplain SourceDirectorySet} that this task compiles.
+	 */
 	@InputFiles
-	FileTree getSources() {
-		return source.asFileTree
+	FileTree getSource() {
+		return source
 	}
 	
 	@TaskAction
@@ -109,6 +103,53 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 		
 		sources.visit(outOfDateProcessor)
 		
+	}
+	
+	/**
+	 * @return The source directories whose contents will be compiled by this task.
+	 */
+	Set<File> getSrcDirs() {
+		source.srcDirs
+	}
+	
+	/**
+	 * Sets the source directories whose contents this task will compile.
+	 * @param srcPaths The source directories. These may either be a {@linkplain SourceDirectorySet}, or are else
+	 *                 evaluated as per {@link Project#file(Object)}.
+	 */
+	void setSrcDirs(Iterable<?> srcPaths) {
+		source.srcDirs = srcPaths
+	}
+	
+	/**
+	 * @return The source directory trees that this task will compile, or an empty set when this task has no sources.
+	 */
+	Set<DirectoryTree> getSrcDirTrees() {
+		source.srcDirTrees
+	}
+	
+	/**
+	 * Adds the given source to be compiled by this task.
+	 * @param source The additional source to be compiled by this task.
+	 */
+	void source(SourceDirectorySet source) {
+		this.source.source(source)
+	}
+	
+	/**
+	 * Adds the given source directory to be compiled by this task.
+	 * @param srcPath The additional source directory, evaluated as per {@link Project#file(Object)}.
+	 */
+	void srcDir(Object srcPath) {
+		source.srcDir(srcPath)
+	}
+	
+	/**
+	 * Adds the given source directories to be compiled by this task.
+	 * @param srcPath The additional source directories, evaluated as per {@link Project#file(Object)}.
+	 */
+	void srcDirs(Object... srcPaths) {
+		source.srcDirs(srcPaths)
 	}
 	
 	/**

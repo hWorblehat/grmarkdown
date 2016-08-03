@@ -13,17 +13,4 @@ import org.uulib.grmd.pegdown.asttransform.HasPegDownOptions
  * @author Rowan Lonsdale
  */
 @HasPegDownOptions
-interface PegDownConfig {
-	
-	/**
-	 * @return The options flags to pass to a {@linkplain PegDownProcessor}.
-	 */
-	int getOptions()
-	
-	/**
-	 * Sets the options flags to pass to the {@linkplain PegDownProcessor}.
-	 * @param options The options to set.
-	 */
-	void setOptions(int options)
-
-}
+interface PegDownConfig extends MinimalPegDownConfig {}

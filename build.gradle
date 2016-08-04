@@ -4,6 +4,7 @@
 plugins {
 	id 'java-gradle-plugin'
 	id 'groovy'
+	id 'jacoco'
 }
 
 allprojects {
@@ -50,6 +51,15 @@ dependencies {
 
 jar {
 	from sourceSets.base.output
+}
+
+jacocoTestReport {
+	additionalClassDirs sourceSets.base.output
+	additionalSourceDirs sourceSets.base.allSource
+}
+
+check {
+	dependsOn jacocoTestReport
 }
 
 gradlePlugin {

@@ -56,11 +56,15 @@ jar {
 
 jacocoTestReport {
 	additionalClassDirs sourceSets.base.output
-	additionalSourceDirs sourceSets.base.allSource
+	additionalSourceDirs sourceSets.base.allJava
 	reports {
 		xml.enabled = true
 		html.enabled = true
 	}
+}
+
+coveralls {
+	sourceDirs += sourceSets.base.allJava.srcDirs.collect{it.path}
 }
 
 tasks.coveralls {

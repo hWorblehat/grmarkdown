@@ -5,6 +5,7 @@ plugins {
 	id 'java-gradle-plugin'
 	id 'groovy'
 	id 'jacoco'
+	id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
 allprojects {
@@ -56,9 +57,13 @@ jar {
 jacocoTestReport {
 	additionalClassDirs sourceSets.base.output
 	additionalSourceDirs sourceSets.base.allSource
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
 }
 
-check {
+tasks.coveralls {
 	dependsOn jacocoTestReport
 }
 

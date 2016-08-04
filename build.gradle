@@ -63,12 +63,12 @@ jacocoTestReport {
 	}
 }
 
-coveralls {
-	sourceDirs += sourceSets.base.allJava.srcDirs.collect{it.path}
+check {
+	dependsOn jacocoTestReport
 }
 
-tasks.coveralls {
-	dependsOn jacocoTestReport
+coveralls {
+	sourceDirs += sourceSets.base.allJava.srcDirs.collect{it.path}
 }
 
 gradlePlugin {

@@ -11,10 +11,11 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder
-import org.uulib.grmd.TestUtils;
 import org.uulib.grmd.task.MarkdownCompile
 
 import spock.lang.*
+
+import static org.uulib.grmd.TestUtils.*
 
 class MarkdownBasePluginSpec extends Specification {
 	
@@ -27,7 +28,7 @@ class MarkdownBasePluginSpec extends Specification {
 		buildFile.text = 
 """
 plugins {
-	id 'org.uulib.grmd.markdown-base'
+	id '${pluginIdBase}.markdown-base'
 }
 
 task('myTask', type: MarkdownCompile) {
@@ -36,7 +37,7 @@ task('myTask', type: MarkdownCompile) {
 """
 		
 		when:
-		BuildResult result = TestUtils.getGradleRunner(projectFolder.root, 'tasks').build()
+		BuildResult result = getGradleRunner(projectFolder.root, 'tasks').build()
 		
 		then:
 		BuildTask taskResult = result.task(":tasks")

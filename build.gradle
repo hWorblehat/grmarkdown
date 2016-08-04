@@ -6,10 +6,8 @@ plugins {
 	id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
-allprojects {
-	repositories {
-		jcenter()
-	}
+repositories {
+	jcenter()
 }
 
 apply from: 'gradle/assemble.gradle'
@@ -18,15 +16,15 @@ apply from: 'gradle/coverage.gradle'
 gradlePlugin {
 	plugins {
 		base {
-			id = 'org.uulib.grmd.markdown-base'
+			id = "${project.group}.markdown-base"
 			implementationClass = 'org.uulib.grmd.plugin.MarkdownBasePlugin'
 		}
 		traditional {
-			id = 'org.uulib.grmd.markdown'
+			id = "${project.group}.markdown"
 			implementationClass = 'org.uulib.grmd.plugin.MarkdownPlugin'
 		}
 		model {
-			id = 'org.uulib.grmd.markdown-lang'
+			id = "${project.group}.markdown-lang"
 			implementationClass = 'org.uulib.grmd.plugin.MarkdownModelPlugin'
 		}
 	}

@@ -19,7 +19,7 @@ class MarkdownModelPluginSpec extends Specification {
 	@Shared String buildScriptText = 
 """
 plugins {
-	id 'org.uulib.grmd.markdown-lang'
+	id '${pluginIdBase}.markdown-lang'
 }
 
 model {

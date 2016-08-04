@@ -146,7 +146,7 @@ class MarkdownCompileSpec extends Specification {
 		buildFile.text =
 """
 plugins {
-	id 'org.uulib.grmd.markdown-base'
+	id '${pluginIdBase}.markdown-base'
 }
 
 task(${taskName}, type: MarkdownCompile) {

@@ -19,7 +19,7 @@ class MarkdownPluginSpec extends Specification {
 		buildFile.text =
 """
 plugins {
-	id 'org.uulib.grmd.markdown'
+	id '${pluginIdBase}.markdown'
 }
 """
 	}

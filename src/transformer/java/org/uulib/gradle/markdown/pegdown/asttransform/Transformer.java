@@ -44,9 +44,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Transforms classes and interfaces annotated with {@linkplain HasPegDownOptions @HasPegDownOptions}.
+ * Transforms classes and interfaces annotated with {@link HasPegDownOptions @HasPegDownOptions}.
  * 
- * It adds boolean getters and setters for each of the options flags defined in the {@linkplain Extensions} interface.
+ * It adds boolean getters and setters for each of the options flags defined in the {@link Extensions} interface.
  * 
  * @author Rowan Lonsdale
  */

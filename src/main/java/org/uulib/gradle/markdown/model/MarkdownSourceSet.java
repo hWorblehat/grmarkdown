@@ -19,7 +19,7 @@ import org.gradle.model.Unmanaged;
 import org.uulib.gradle.markdown.pegdown.PegDownConfig;
 
 /**
- * A {@linkplain LanguageSourceSet} for markdown sources.
+ * A {@link LanguageSourceSet} for markdown sources.
  * @author Rowan Lonsdale
  */
 @Managed

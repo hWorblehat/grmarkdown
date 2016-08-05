@@ -33,7 +33,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Base Gradle plugin for markdown:
  * <ul>
- *   <li/> Adds the {@linkplain MarkdownCompile} and {@linkplain AbstractMarkdownCompile} tasks class as extra
+ *   <li/> Adds the {@link MarkdownCompile} and {@link AbstractMarkdownCompile} tasks class as extra
  *         properties to the project, so that new tasks of these types can be defined in the build script.
  *   <li/> Applies a rule that sets a default description for all tasks of type AbstractMarkdownCompile.
  * </ul>

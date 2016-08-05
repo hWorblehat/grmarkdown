@@ -14,19 +14,19 @@
 package org.uulib.gradle.markdown.pegdown;
 
 /**
- * Configuration options for a {@linkplain PegDownProcessor}.
+ * Configuration options for a {@link PegDownProcessor}.
  * 
  * @author Rowan Lonsdale
  */
 public interface MinimalPegDownConfig {
 	
 	/**
-	 * @return The options flags to pass to a {@linkplain PegDownProcessor}.
+	 * @return The options flags to pass to a {@link PegDownProcessor}.
 	 */
 	int getOptions();
 	
 	/**
-	 * Sets the options flags to pass to the {@linkplain PegDownProcessor}.
+	 * Sets the options flags to pass to the {@link PegDownProcessor}.
 	 * @param options The options to set.
 	 */
 	void setOptions(int options);

@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.uulib.gradle.markdown.MarkdownProcessor;
 
 /**
- * A {@linkplain MarkdownProcessor} that uses <a href="http://pegdown.org">Pegdown</a> to compile markdown.
+ * A {@link MarkdownProcessor} that uses <a href="http://pegdown.org">Pegdown</a> to compile markdown.
  * 
  * @author Rowan Lonsdale
  */

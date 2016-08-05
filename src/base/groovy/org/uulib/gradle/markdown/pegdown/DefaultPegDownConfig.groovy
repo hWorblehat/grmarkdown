@@ -18,7 +18,7 @@ import org.uulib.gradle.markdown.pegdown.asttransform.HasPegDownOptions
 import org.uulib.gradle.markdown.pegdown.asttransform.PegDownOptions;;
 
 /**
- * Default implementation of {@linkplain PegDownConfig}.
+ * Default implementation of {@link PegDownConfig}.
  * @author Rowan Lonsdale
  */
 @HasPegDownOptions

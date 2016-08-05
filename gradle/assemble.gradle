@@ -51,3 +51,42 @@ dependencies {
 jar {
 	from sourceSets.base.output
 }
+
+String j2seDocsURL = 'http://docs.oracle.com/javase/7/docs/api/'
+String gradleDocsURL = "https://docs.gradle.org/${gradle.gradleVersion}"
+String pegdownDocsURL = "http://www.javadoc.io/doc/org.pegdown/pegdown/1.6.0"
+
+Closure javadocOptions =  {
+	use         = true
+	windowTitle = "$project.name $project.version API"
+	docTitle    = "$project.name $project.version API"
+}
+
+javadoc {
+	source(sourceSets.base.java)
+	
+	javadocOptions.setDelegate(options)
+	javadocOptions.call()
+	
+	options.encoding    = 'UTF-8'
+	options.author      = true
+	options.version     = true
+	options.links(j2seDocsURL, "${gradleDocsURL}/javadoc/", "${gradleDocsURL}/groovydoc/", pegdownDocsURL)
+}
+
+groovydoc {
+	source(sourceSets.transformer.java)
+	source(sourceSets.base.allJava)
+	source(sourceSets.base.groovy)
+	source(sourceSets.main.java)
+	
+	classpath = sourceSets.main.compileClasspath
+	
+	javadocOptions.setDelegate(delegate)
+	javadocOptions.call()
+	
+	link(j2seDocsURL, 'java')
+	link("${gradleDocsURL}/javadoc/", 'org.gradle')
+	link("${gradleDocsURL}/groovydoc/", 'org.gradle')
+	link(pegdownDocsURL, 'org.pegdown')
+}

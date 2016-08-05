@@ -21,7 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Informs the {@linkplain Transformer} that the annotated field should be used to store pegdown extension option flags.
+ * Informs the {@link Transformer} that the annotated field should be used to store pegdown extension option flags.
  * The annotated field must be non-final and an integer.
  * @see HasPegDownOptions
  * @author Rowan Lonsdale

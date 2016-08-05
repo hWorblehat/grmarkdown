@@ -30,19 +30,29 @@ import org.uulib.gradle.markdown.task.MarkdownCompile;
 /**
  * Convention plugin for compiling markdown in a "traditional" Gradle project configuration:
  * <ul>
- *   <li/> Applies the {@linkplain MarkdownBasePlugin} and {@linkplain LifecycleBasePlugin} plugins.
- *   <li/> Creates a new {@linkplain MarkdownCompile} task named {@value #MARKDOWN_TASK_NAME} that compiles markdown
- *         under {@value #DEFAULT_SRC_DIR} into {@value #DEFAULT_DESTINATION_DIR} in the project build directory.
- *   <li/> Sets {@value #MARKDOWN_TASK_NAME} as a dependency of the
- *         {@linkplain LifecycleBasePlugin#ASSEMBLE_TASK_NAME assemble task}.
+ *   <li/> Applies the {@link MarkdownBasePlugin} and {@link LifecycleBasePlugin} plugins.
+ *   <li/> Creates a new {@link MarkdownCompile} task that compiles markdown
+ *         under {@link #DEFAULT_SRC_DIR} into {@link #DEFAULT_DESTINATION_DIR} in the project build directory.
+ *   <li/> Sets this task as a dependency of the {@link LifecycleBasePlugin#ASSEMBLE_TASK_NAME assemble task}.
  * </ul>
  * @author Rowan Lonsdale
  */
 public class MarkdownPlugin implements Plugin<Project> {
 	
+	/**
+	 * The name of the {@link MarkdownCompile} task this plugin creates.
+	 */
 	public static final String MARKDOWN_TASK_NAME = "compileMarkdown";
 	public static final String DEFAULT_SRC_NAME = "docs";
+	
+	/**
+	 * The default source directory where the {@link MarkdownCompile} task looks for markdown files.
+	 */
 	public static final String DEFAULT_SRC_DIR = "src/docs/markdown";
+	
+	/**
+	 * The default output directory for the {@link MarkdownCompile} task that this plugin creates.
+	 */
 	public static final String DEFAULT_DESTINATION_DIR = "docs/html";
 
 	@Override

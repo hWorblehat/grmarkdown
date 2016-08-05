@@ -39,7 +39,7 @@ import org.gradle.language.base.sources.BaseLanguageSourceSet
  * A task whose inputs are taken from source directories, and where each output file generally depend on a single
  * input file.
  * <p/>
- * This task's {@linkplain #getActions() actions} are defined in this class, and extending classes provide a function
+ * This task's {@link #getActions() actions} are defined in this class, and extending classes provide a function
  * to process each source file via the {@link #getOutOfDateProcessor()} method.
  * @author Rowan Lonsdale
  */
@@ -70,7 +70,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	}
 	
 	/**
-	 * The {@linkplain SourceDirectorySet} that this task compiles.
+	 * The {@link SourceDirectorySet} that this task compiles.
 	 */
 	@InputFiles
 	FileTree getSource() {
@@ -127,7 +127,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	
 	/**
 	 * Sets the source directories whose contents this task will compile.
-	 * @param srcPaths The source directories. These may either be a {@linkplain SourceDirectorySet}, or are else
+	 * @param srcPaths The source directories. These may either be a {@link SourceDirectorySet}, or are else
 	 *                 evaluated as per {@link Project#file(Object)}.
 	 */
 	void setSrcDirs(Iterable<?> srcPaths) {
@@ -166,7 +166,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	}
 	
 	/**
-	 * Produces a {@linkplain FileVisitor} that will visit each of the out-of-date source files and directories in this
+	 * Produces a {@link FileVisitor} that will visit each of the out-of-date source files and directories in this
 	 * task's sources. This method will only be called once per execution of the task.
 	 * @return The FileVisitor that compiles out of date sources into new outputs.
 	 */
@@ -175,7 +175,7 @@ public abstract class IncrementalSourceTask extends DefaultTask {
 	/**
 	 * Deletes the output files corresponding to the specified source file, which was removed since the last run.
 	 * @param srcDir The root source directory that contained the source file.
-	 * @param input The {@linkplain Path} of the deleted source file relative to the root source directory.
+	 * @param input The {@link Path} of the deleted source file relative to the root source directory.
 	 */
 	protected abstract void deleteOutputs(File srcDir, Path input)
 	

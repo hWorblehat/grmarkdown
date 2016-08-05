@@ -30,7 +30,7 @@ import org.uulib.gradle.markdown.Util
 import org.uulib.gradle.markdown.Defaults
 
 /**
- * Compiles markdown sources to html. The choice of the {@linkplain MarkdownProcessor} to use is left to the
+ * Compiles markdown sources to html. The choice of the {@link MarkdownProcessor} to use is left to the
  * extending class.
  * @author Rowan Lonsdale
  */
@@ -73,7 +73,7 @@ abstract class AbstractMarkdownCompile extends IncrementalSourceTask {
 	}
 
 	/**
-	 * @return The {@linkplain MarkdownProcessor} to use to compile markdown to HTML.
+	 * @return The {@link MarkdownProcessor} to use to compile markdown to HTML.
 	 */
 	protected abstract MarkdownProcessor getMarkdownProcessor()
 	

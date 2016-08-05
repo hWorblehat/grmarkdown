@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2016 Rowan Lonsdale.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+license {
+	
+	String originalYear = '2016'
+	String currentYear = Calendar.getInstance().get(Calendar.YEAR)
+	
+	ext {
+		period = originalYear==currentYear ? currentYear : "${originalYear}-${currentYear}"
+		author = 'Rowan Lonsdale'
+	}
+	
+	header = rootProject.file('src/license_header.txt')
+	strictCheck = true
+	ignoreFailures = false
+	mapping {
+		java = 'SLASHSTAR_STYLE'
+		groovy = 'SLASHSTAR_STYLE'
+		gradle = 'SLASHSTAR_STYLE'
+	}
+	
+	sourceSets = project.sourceSets
+}
+
+FileTree gradleFiles = fileTree(projectDir) {
+	include '**/*.gradle'
+	exclude '.gradle/**'
+}
+
+task(licenseFormatGradle, type: License) {
+	description = 'Applies license header to gradle files.'
+	source gradleFiles
+}
+
+tasks.licenseFormat {
+	dependsOn licenseFormatGradle
+}
+
+task(licenseGradle, type: License) {
+	description = 'Checks for license header violations in gradle files.'
+	check = true
+	source gradleFiles
+}
+
+tasks.license {
+	dependsOn licenseGradle
+}

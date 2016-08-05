@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2016 Rowan Lonsdale.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+String traditionalPluginId = "${project.group}.markdown"
+String modelPluginId = "${project.group}.markdown-lang"
+
+gradlePlugin {
+	plugins {
+		base {
+			id = "${project.group}.markdown-base"
+			implementationClass = "${rootPackage}.plugin.MarkdownBasePlugin"
+		}
+		traditional {
+			id = traditionalPluginId
+			implementationClass = "${rootPackage}.plugin.MarkdownPlugin"
+		}
+		model {
+			id = modelPluginId
+			implementationClass = "${rootPackage}.plugin.MarkdownModelPlugin"
+		}
+	}
+}
+
+List<String> pluginTags = ['markdown']
+
+pluginBundle {
+	website = project.website
+	vcsUrl = project.vcsUrl
+	description = project.description
+  
+	plugins {
+		
+		traditional {
+			id = traditionalPluginId
+			displayName = 'Markdown Plugin'
+			tags = pluginTags
+			description = "Creates a 'compileMarkdown' task for compiling markdown under src/docs/markdown to HTML."
+		}
+
+		model {
+			id = modelPluginId
+			displayName = 'Markdown Software Model Plugin'
+			description =
+					"Adds a 'DocumentationSpec' component spec, 'MarkdownSourceSet' source set, and 'HtmlBinary' " +
+					"binarySpec to the Gradle software model. For each MarkdownSourceSet related to each HtmlBinary, " +
+					"a task is created that compiles markdown files in the source set into HTML files in the binary."
+			tags = pluginTags
+		}
+	}
+}

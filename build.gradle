@@ -17,7 +17,7 @@ plugins {
 	id 'groovy'
 	id 'jacoco'
 	id 'com.github.kt3k.coveralls' version '2.6.3'
-	//id 'com.gradle.plugin-publish'
+	id 'com.gradle.plugin-publish' version '0.9.5'
 	id "com.github.hierynomus.license" version "0.13.1"
 }
 
@@ -29,23 +29,4 @@ repositories {
 
 fileTree('gradle') { include '**/*.gradle' }.each {
 	apply from: it
-}
-
-String rootPackage = 'org.uulib.gradle.markdown'
-
-gradlePlugin {
-	plugins {
-		base {
-			id = "${project.group}.markdown-base"
-			implementationClass = "${rootPackage}.plugin.MarkdownBasePlugin"
-		}
-		traditional {
-			id = "${project.group}.markdown"
-			implementationClass = "${rootPackage}.plugin.MarkdownPlugin"
-		}
-		model {
-			id = "${project.group}.markdown-lang"
-			implementationClass = "${rootPackage}.plugin.MarkdownModelPlugin"
-		}
-	}
 }

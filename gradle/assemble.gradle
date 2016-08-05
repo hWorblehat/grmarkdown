@@ -63,7 +63,11 @@ Closure javadocOptions =  {
 }
 
 javadoc {
-	source(sourceSets.base.java)
+	source(sourceSets.transformer.allJava)
+	source(sourceSets.base.allJava)
+	source(sourceSets.main.allJava)
+	
+	classpath = sourceSets.main.compileClasspath
 	
 	javadocOptions.setDelegate(options)
 	javadocOptions.call()

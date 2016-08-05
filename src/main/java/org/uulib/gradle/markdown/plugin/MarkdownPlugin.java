@@ -30,10 +30,10 @@ import org.uulib.gradle.markdown.task.MarkdownCompile;
 /**
  * Convention plugin for compiling markdown in a "traditional" Gradle project configuration:
  * <ul>
- *   <li/> Applies the {@link MarkdownBasePlugin} and {@link LifecycleBasePlugin} plugins.
- *   <li/> Creates a new {@link MarkdownCompile} task that compiles markdown
+ *   <li> Applies the {@link MarkdownBasePlugin} and {@link LifecycleBasePlugin} plugins.
+ *   <li> Creates a new {@link MarkdownCompile} task that compiles markdown
  *         under {@link #DEFAULT_SRC_DIR} into {@link #DEFAULT_DESTINATION_DIR} in the project build directory.
- *   <li/> Sets this task as a dependency of the {@link LifecycleBasePlugin#ASSEMBLE_TASK_NAME assemble task}.
+ *   <li> Sets this task as a dependency of the {@link LifecycleBasePlugin#ASSEMBLE_TASK_NAME assemble task}.
  * </ul>
  * @author Rowan Lonsdale
  */
